@@ -1,0 +1,20 @@
+version: '3'
+services:
+  # node-app:
+  #   build:
+  #     context: ./
+  #     dockerfile: dockerfile
+  #   ports:
+  #     - 3000:3000
+  db:
+    image: mariadb
+    container_name: ddbb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: matias
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+        - "3307:3306"
+volumes:
+  dbdata:

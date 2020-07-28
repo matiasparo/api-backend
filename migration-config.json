@@ -1,0 +1,22 @@
+{
+	"defaultEnv": { "ENV": "NODE_ENV" },
+	"sql-file": true,
+	"development": {
+		"driver": "mysql",
+		"user": { "ENV": "TYPEORM_USERNAME" },
+		"password": { "ENV": "TYPEORM_PASSWORD" },
+		"host": { "ENV": "TYPEORM_HOST" },
+		"database": { "ENV": "TYPEORM_DATABASE" },
+		"port": { "ENV": "TYPEORM_PORT" },
+		"multipleStatements": true
+	},
+	"prod": {
+		"driver": "mysql",
+		"user": { "ENV": "TYPEORM_USERNAME" },
+		"password": { "ENV": "TYPEORM_PASSWORD" },
+		"host": { "ENV": "TYPEORM_HOST" },
+		"database": { "ENV": "TYPEORM_DATABASE" },
+		"port": { "ENV": "TYPEORM_PORT" },
+		"multipleStatements": true
+	}
+}
