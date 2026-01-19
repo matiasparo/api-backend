@@ -1,5 +1,5 @@
 import { Response, NextFunction, Request } from 'express';
-import { verify } from 'jsonwebtoken';
+import { verify, Algorithm } from 'jsonwebtoken';
 import { HTTP404Error, HTTP401Error } from '../../../utils/models/httpClientErrors';
 import { UserService } from './../service/usersService';
 import { IUser, IGetUserAuthInfoRequest } from './../models';
@@ -13,7 +13,7 @@ const ensureAuthenticated = (req: IGetUserAuthInfoRequest, res: Response, next: 
 	}
 
 	const token = req.headers.authorization.split(' ')[1];
-	verify(token, process.env.JWT_SECRET!, { algorithms: [process.env.JWT_ALGORITHM! as any] }, (err, payload: any) => {
+	verify(token, process.env.JWT_SECRET!, { algorithms: [process.env.JWT_ALGORITHM! as Algorithm] }, (err, payload: any) => {
 		if (err) {
 			// token expired
 			return next(new HTTP401Error(err.message));

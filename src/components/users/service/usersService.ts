@@ -1,7 +1,7 @@
 import { hashSync, compareSync } from 'bcrypt';
 import { UserDal } from '../dal/usersDal';
 import { ITokens, IUser, IUserData, TypeToken, Role } from '../models';
-import { sign, Secret } from 'jsonwebtoken';
+import { sign, Secret, Algorithm } from 'jsonwebtoken';
 import { UserLogger } from '../usersLogger';
 import { utc } from 'moment';
 import { UserMessage } from '../userMessage';
@@ -240,6 +240,6 @@ export class UserService {
 
 	private generateToken(payload: any) {
 		const SEED: Secret = process.env.JWT_SECRET || 'DEV';
-		return sign({ payload }, SEED, { expiresIn: process.env.JWT_EXPIRE_TOKEN, algorithm: process.env.JWT_ALGORITHM as any });
+		return sign({ payload }, SEED, { expiresIn: process.env.JWT_EXPIRE_TOKEN, algorithm: process.env.JWT_ALGORITHM as Algorithm });
 	}
 }
