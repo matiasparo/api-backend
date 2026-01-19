@@ -41,9 +41,11 @@ export class BannedIpDal {
 		const now = utc(new Date()).toDate();
 		//UserLogger.info('fecha a comparar', now);
 		const userBannedIp = await userBannedRespository.findOne({
-			dateEnd: MoreThan(now),
-			user,
-			ip,
+			where: {
+				dateEnd: MoreThan(now),
+				user,
+				ip,
+			},
 		});
 		if (userBannedIp) {
 			const bannedIp: IBannedIp = {

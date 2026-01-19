@@ -39,7 +39,7 @@ export class EmailDal {
 	static async updateEmailSystem(email: IEmail) {
 		if (email?.id) {
 			const emailRepository = getRepository(EmailSystem);
-			const emailDB = await emailRepository.findOne({ id: email?.id });
+			const emailDB = await emailRepository.findOne({ where: { id: email?.id } });
 			if (emailDB) {
 				emailDB.messageId = email?.messageId ? email?.messageId : '0000';
 				emailDB.sended = true;

@@ -1,7 +1,7 @@
 import { hashSync, compareSync } from 'bcrypt';
 import { UserDal } from '../dal/usersDal';
 import { ITokens, IUser, IUserData, TypeToken, Role } from '../models';
-import { sign, Secret } from 'jsonwebtoken';
+import { sign, Secret, Algorithm } from 'jsonwebtoken';
 import { UserLogger } from '../usersLogger';
 import { utc } from 'moment';
 import { UserMessage } from '../userMessage';
@@ -115,7 +115,8 @@ export class UserService {
 					//UserLogger.debug(`no login failed password for user ${user.userName}`);
 					if (userAuth) {
 						const cntIntent = await UserDal.incrementIntentAuth(userAuth);
-						if (cntIntent >= (process.env.MAX_INTENTS_LOGIN || 3)) {
+						const maxIntents = parseInt(process.env.MAX_INTENTS_LOGIN || '3', 10);
+						if (cntIntent >= maxIntents) {
 							//UserLogger.debug(`User ${user.userName} Blocked intents: ${cntIntent}`);
 							//UserLogger.warning(`User ${user.userName} Blocked intents: ${cntIntent}`);
 							let bannedIp = null;
@@ -239,6 +240,6 @@ export class UserService {
 
 	private generateToken(payload: any) {
 		const SEED: Secret = process.env.JWT_SECRET || 'DEV';
-		return sign({ payload }, SEED, { expiresIn: process.env.JWT_EXPIRE_TOKEN, algorithm: process.env.JWT_ALGORITHM });
+		return sign({ payload }, SEED, { expiresIn: process.env.JWT_EXPIRE_TOKEN, algorithm: process.env.JWT_ALGORITHM as Algorithm });
 	}
 }
