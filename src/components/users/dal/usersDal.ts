@@ -47,7 +47,7 @@ export class UserDal {
 		return new Promise<IUser | null>(async (resolve, reject) => {
 			try {
 				const userRepository = getRepository(User);
-				const userDB = await userRepository.find({ username: userName });
+				const userDB = await userRepository.find({ where: { username: userName } });
 				if (userDB.length > 0) {
 					const user: IUser = {
 						id: userDB[0].id,
@@ -74,7 +74,7 @@ export class UserDal {
 		return new Promise<IUser | null>(async (resolve, reject) => {
 			try {
 				const userRepository = getRepository(User);
-				const userDB = await userRepository.find({ id: userId });
+				const userDB = await userRepository.find({ where: { id: userId } });
 				if (userDB.length > 0) {
 					const user: IUser = {
 						id: userDB[0].id,
@@ -119,7 +119,7 @@ export class UserDal {
 	static async createItemsUser(userType: Role, userId: number) {
 		const userRepository = getRepository(User);
 		//const itemRepository = getRepository(Item);
-		const user = await userRepository.findOne({ id: userId });
+		const user = await userRepository.findOne({ where: { id: userId } });
 		//UserLogger.info(`usuario encontrado ${user?.id}`);
 		// TODO: Get items database to user menu
 		// const items = await itemRepository.find({
@@ -162,8 +162,8 @@ export class UserDal {
 
 	//TODO: implement UPDATE
 	static async updateUser(user: IUser): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			resolve();
+		return new Promise((resolve) => {
+			resolve(true);
 		});
 	}
 
@@ -187,7 +187,7 @@ export class UserDal {
 	static async incrementIntentAuth(user: IUser) {
 		if (user.id) {
 			const userRespository = getRepository(User);
-			const userAuth = await userRespository.findOne({ id: user.id });
+			const userAuth = await userRespository.findOne({ where: { id: user.id } });
 			//UserLogger.info('user auth', userAuth);
 			if (userAuth?.intents !== undefined) {
 				const intents = userAuth.intents + 1;
@@ -209,7 +209,7 @@ export class UserDal {
 	static async resetIntentAuth(user: IUser) {
 		if (user.id) {
 			const userRespository = getRepository(User);
-			const userAuth = await userRespository.findOne({ id: user.id });
+			const userAuth = await userRespository.findOne({ where: { id: user.id } });
 			//UserLogger.info('user auth', userAuth);
 			const resultConfirm = await userRespository.update(
 				{
@@ -258,11 +258,13 @@ export class UserDal {
 		const now = utc().format();
 		//UserLogger.debug(now);
 		const tokenResp = await tokensRespository.findOne({
-			expirationDate: Raw((alias) => `${alias} > '${now}'`),
-			token,
-			type: TypeToken.Create,
-			isUsed: false,
-			usedDate: IsNull(),
+			where: {
+				expirationDate: Raw((alias) => `${alias} > '${now}'`),
+				token,
+				type: TypeToken.Create,
+				isUsed: false,
+				usedDate: IsNull(),
+			},
 		});
 
 		if (tokenResp) {
@@ -302,11 +304,13 @@ export class UserDal {
 
 		const now = utc().format();
 		const tokenResp = await tokenLoginRespository.findOne({
-			expirationDate: Raw((alias) => `${alias} > '${now}'`),
-			token,
-			type: TypeToken.Login,
-			isUsed: false,
-			usedDate: IsNull(),
+			where: {
+				expirationDate: Raw((alias) => `${alias} > '${now}'`),
+				token,
+				type: TypeToken.Login,
+				isUsed: false,
+				usedDate: IsNull(),
+			},
 		});
 
 		if (tokenResp) {

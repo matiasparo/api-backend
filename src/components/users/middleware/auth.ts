@@ -13,7 +13,7 @@ const ensureAuthenticated = (req: IGetUserAuthInfoRequest, res: Response, next: 
 	}
 
 	const token = req.headers.authorization.split(' ')[1];
-	verify(token, process.env.JWT_SECRET!, { algorithms: [process.env.JWT_ALGORITHM!] }, (err, payload: any) => {
+	verify(token, process.env.JWT_SECRET!, { algorithms: [process.env.JWT_ALGORITHM! as any] }, (err, payload: any) => {
 		if (err) {
 			// token expired
 			return next(new HTTP401Error(err.message));

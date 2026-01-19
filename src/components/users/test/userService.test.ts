@@ -62,5 +62,4 @@ describe('Login user', () => {
 
 		expect(userLogin).toEqual(nonActivate);
 	});
-	
 });
